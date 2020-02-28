@@ -1,0 +1,267 @@
+{
+	"info": {
+		"_postman_id": "fb9f3db7-12d4-4945-844b-77a9a8000924",
+		"name": "SUNAT-CPE-VALIDEZ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:9080/api/cpe/validez",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"comprobante\": {\n\t\t\"ruc\": \"20251011461\",\n\t\t\"tipoCpe\": \"03\",\n\t\t\"serie\": \"B004\",\n\t\t\"correlativo\": \"159585\"\n\t},\n\t\"fechaEmision\": \"21/11/2019\",\n\t\"importeTotal\": 50.00\n}\n\t\t\t",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9080/api/cpe/validez",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"api",
+						"cpe",
+						"validez"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9080/api/cpe/validez/lote",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\n\t\t\"comprobante\": {\n\t\t\t\"ruc\": \"20251011461\",\n\t\t\t\"tipoCpe\": \"03\",\n\t\t\t\"serie\": \"B004\",\n\t\t\t\"correlativo\": \"159585\"\n\t\t},\n\t\t\"fechaEmision\": \"21/11/2019\",\n\t\t\"importeTotal\": 50.00\n\t},\n\t{\n\t\t\"comprobante\": {\n\t\t\t\"ruc\": \"20347100316\",\n\t\t\t\"tipoCpe\": \"03\",\n\t\t\t\"serie\": \"B137\",\n\t\t\t\"correlativo\": \"102928\"\n\t\t},\n\t\t\"fechaEmision\": \"21/02/2020\",\n\t\t\"importeTotal\": 249.00\n\t},\n\t{\n\t\t\"comprobante\": {\n\t\t\t\"ruc\": \"20100128056\",\n\t\t\t\"tipoCpe\": \"03\",\n\t\t\t\"serie\": \"BADD\",\n\t\t\t\"correlativo\": \"00042895\"\n\t\t},\n\t\t\"fechaEmision\": \"14/02/2020\",\n\t\t\"importeTotal\": 459.00\n\t}\n]\n\t\t\t",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9080/api/cpe/validez/lote-secuencial",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"api",
+						"cpe",
+						"validez",
+						"lote-secuencial"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://api-seguridad.sunat.gob.pe/v1/clientesextranet/bdb4319e-b846-4eeb-a4f7-65870dd67cc4/oauth2/token/",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "https://api.sunat.gob.pe/v1/contribuyente/contribuyentes",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "bdb4319e-b846-4eeb-a4f7-65870dd67cc4",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "ibTGGSJLpyypjnEDh2X9vQ==",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api-seguridad.sunat.gob.pe/v1/clientesextranet/bdb4319e-b846-4eeb-a4f7-65870dd67cc4/oauth2/token/",
+					"protocol": "https",
+					"host": [
+						"api-seguridad",
+						"sunat",
+						"gob",
+						"pe"
+					],
+					"path": [
+						"v1",
+						"clientesextranet",
+						"bdb4319e-b846-4eeb-a4f7-65870dd67cc4",
+						"oauth2",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://api.sunat.gob.pe/v1/contribuyente/contribuyentes/20112811096/validarcomprobante",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJraWQiOiJhcGkuc3VuYXQuZ29iLnBlLmtpZDEwMSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJiZGI0MzE5ZS1iODQ2LTRlZWItYTRmNy02NTg3MGRkNjdjYzQiLCJhdWQiOiJbe1wiYXBpXCI6XCJodHRwczpcL1wvYXBpLnN1bmF0LmdvYi5wZVwiLFwicmVjdXJzb1wiOlt7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvY29udHJpYnV5ZW50ZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJvbGFkdWFuZXJvXC9kZWNsYXJhY2lvbmVzdGFpXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL2NvbnRyb2xhZHVhbmVyb1wvc29saWNpdHVkZXNkZWNsYXJhY2lvbnRhaVwiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9LHtcImlkXCI6XCJcL3YxXC90ZWNub2xvZ2lhXC9jb250cm9sbWVuc2FqZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvc29saWNpdHVkZXNjZHRcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvcmVjYXVkYWNpb25cL2NvbnRyaWJ1eWVudGVzXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL3JlY2F1ZGFjaW9uXC9jb250cmlidXllbnRlc1wiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9XX0se1wiYXBpXCI6XCJodHRwczpcL1wvYXBpLnN1bmF0LmdvYi5wZVwiLFwicmVjdXJzb1wiOlt7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvY29udHJpYnV5ZW50ZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJvbGFkdWFuZXJvXC9kZWNsYXJhY2lvbmVzdGFpXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL2NvbnRyb2xhZHVhbmVyb1wvc29saWNpdHVkZXNkZWNsYXJhY2lvbnRhaVwiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9LHtcImlkXCI6XCJcL3YxXC90ZWNub2xvZ2lhXC9jb250cm9sbWVuc2FqZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvc29saWNpdHVkZXNjZHRcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvcmVjYXVkYWNpb25cL2NvbnRyaWJ1eWVudGVzXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL3JlY2F1ZGFjaW9uXC9jb250cmlidXllbnRlc1wiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9XX0se1wiYXBpXCI6XCJodHRwczpcL1wvYXBpLnN1bmF0LmdvYi5wZVwiLFwicmVjdXJzb1wiOlt7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvY29udHJpYnV5ZW50ZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJvbGFkdWFuZXJvXC9kZWNsYXJhY2lvbmVzdGFpXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL2NvbnRyb2xhZHVhbmVyb1wvc29saWNpdHVkZXNkZWNsYXJhY2lvbnRhaVwiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9LHtcImlkXCI6XCJcL3YxXC90ZWNub2xvZ2lhXC9jb250cm9sbWVuc2FqZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvc29saWNpdHVkZXNjZHRcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvcmVjYXVkYWNpb25cL2NvbnRyaWJ1eWVudGVzXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL3JlY2F1ZGFjaW9uXC9jb250cmlidXllbnRlc1wiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9XX0se1wiYXBpXCI6XCJodHRwczpcL1wvYXBpLnN1bmF0LmdvYi5wZVwiLFwicmVjdXJzb1wiOlt7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvY29udHJpYnV5ZW50ZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJvbGFkdWFuZXJvXC9kZWNsYXJhY2lvbmVzdGFpXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL2NvbnRyb2xhZHVhbmVyb1wvc29saWNpdHVkZXNkZWNsYXJhY2lvbnRhaVwiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9LHtcImlkXCI6XCJcL3YxXC90ZWNub2xvZ2lhXC9jb250cm9sbWVuc2FqZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvc29saWNpdHVkZXNjZHRcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvcmVjYXVkYWNpb25cL2NvbnRyaWJ1eWVudGVzXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL3JlY2F1ZGFjaW9uXC9jb250cmlidXllbnRlc1wiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9XX0se1wiYXBpXCI6XCJodHRwczpcL1wvYXBpLnN1bmF0LmdvYi5wZVwiLFwicmVjdXJzb1wiOlt7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvY29udHJpYnV5ZW50ZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJvbGFkdWFuZXJvXC9kZWNsYXJhY2lvbmVzdGFpXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL2NvbnRyb2xhZHVhbmVyb1wvc29saWNpdHVkZXNkZWNsYXJhY2lvbnRhaVwiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9LHtcImlkXCI6XCJcL3YxXC90ZWNub2xvZ2lhXC9jb250cm9sbWVuc2FqZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvc29saWNpdHVkZXNjZHRcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvcmVjYXVkYWNpb25cL2NvbnRyaWJ1eWVudGVzXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL3JlY2F1ZGFjaW9uXC9jb250cmlidXllbnRlc1wiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9XX0se1wiYXBpXCI6XCJodHRwczpcL1wvYXBpLnN1bmF0LmdvYi5wZVwiLFwicmVjdXJzb1wiOlt7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvY29udHJpYnV5ZW50ZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJvbGFkdWFuZXJvXC9kZWNsYXJhY2lvbmVzdGFpXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL2NvbnRyb2xhZHVhbmVyb1wvc29saWNpdHVkZXNkZWNsYXJhY2lvbnRhaVwiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9LHtcImlkXCI6XCJcL3YxXC90ZWNub2xvZ2lhXC9jb250cm9sbWVuc2FqZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvc29saWNpdHVkZXNjZHRcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvcmVjYXVkYWNpb25cL2NvbnRyaWJ1eWVudGVzXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL3JlY2F1ZGFjaW9uXC9jb250cmlidXllbnRlc1wiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9XX0se1wiYXBpXCI6XCJodHRwczpcL1wvYXBpLnN1bmF0LmdvYi5wZVwiLFwicmVjdXJzb1wiOlt7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvY29udHJpYnV5ZW50ZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJvbGFkdWFuZXJvXC9kZWNsYXJhY2lvbmVzdGFpXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL2NvbnRyb2xhZHVhbmVyb1wvc29saWNpdHVkZXNkZWNsYXJhY2lvbnRhaVwiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9LHtcImlkXCI6XCJcL3YxXC90ZWNub2xvZ2lhXC9jb250cm9sbWVuc2FqZXNcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvY29udHJpYnV5ZW50ZVwvc29saWNpdHVkZXNjZHRcIixcImluZGljYWRvclwiOlwiMFwiLFwiZ3RcIjpcIjAxMDAwMFwifSx7XCJpZFwiOlwiXC92MVwvcmVjYXVkYWNpb25cL2NvbnRyaWJ1eWVudGVzXCIsXCJpbmRpY2Fkb3JcIjpcIjBcIixcImd0XCI6XCIwMTAwMDBcIn0se1wiaWRcIjpcIlwvdjFcL3JlY2F1ZGFjaW9uXC9jb250cmlidXllbnRlc1wiLFwiaW5kaWNhZG9yXCI6XCIwXCIsXCJndFwiOlwiMDEwMDAwXCJ9XX0se1wiYXBpXCI6XCJodHRwczpcL1wvd3Muc3VuYXQuZ29iLnBlXCIsXCJyZWN1cnNvXCI6bnVsbH0se1wiYXBpXCI6XCJodHRwczpcL1wvd3Muc3VuYXQuZ29iLnBlXCIsXCJyZWN1cnNvXCI6bnVsbH1dIiwibmJmIjoxNTgyNzc0NDE0LCJjbGllbnRJZCI6ImJkYjQzMTllLWI4NDYtNGVlYi1hNGY3LTY1ODcwZGQ2N2NjNCIsImlzcyI6Imh0dHBzOlwvXC9hcGktc2VndXJpZGFkLnN1bmF0LmdvYi5wZVwvdjFcL2NsaWVudGVzZXh0cmFuZXRcL2JkYjQzMTllLWI4NDYtNGVlYi1hNGY3LTY1ODcwZGQ2N2NjNFwvb2F1dGgyXC90b2tlblwvIiwiZXhwIjoxNTgyNzc4MDE0LCJncmFudFR5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJpYXQiOjE1ODI3NzQ0MTR9.HMwWhJ9q5KQ_MeKabWsCmrfvPHjUlcf7-NI5Z-r__nV9Hi1wR7e8jQfp91HJyv4kE6u0EkjXBN6ecDGMaY1jPXrSIp55A01r4LG73HGG_fwudnKI7MKUyaO_LUs82kRS0WHU7w_9v4LJu6JS3ot5ujie0n21i0p9K_7aln-KrVJb8L6yYVN4GSytV_C2MKeZXAWR3ia91dzNa9iLiTxMuXfhUVcaOIQe_aZsWmYec1xprTX1t7vZtboQiycIBu8yPNLfEDD15Jty13caKLDNveUG9LIHRdyvwUWYm60r5TR4IMzjwvst6v8zSZqXCNW_cExtfyB1-gah2XwjxFD5og",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"numRuc\": \"20251011461\",\n\t\"codComp\": \"03\",\n\t\"numeroSerie\": \"B004\",\n\t\"numero\": \"159585\",\n\t\"fechaEmision\": \"21/11/2019\",\n\t\"monto\": \"50.00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.sunat.gob.pe/v1/contribuyente/contribuyentes/20112811096/validarcomprobante",
+					"protocol": "https",
+					"host": [
+						"api",
+						"sunat",
+						"gob",
+						"pe"
+					],
+					"path": [
+						"v1",
+						"contribuyente",
+						"contribuyentes",
+						"20112811096",
+						"validarcomprobante"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://ww1.sunat.gob.pe/ol-ti-itconsultaunificada/consultaUnificada/consultaIndividual",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "ITCONSULTAUNIFICADASESSION=i7KEdy7OKuEMP2Pp51H2WOvBzbV2WZaZSrEAurE6VGKBLpyEdoCr5maXeS9OSankf9t6IhrWyjZkhQgEYUO5BXFLmy70oS5rzxQ8LRRCA-kELLwoDR9_Y8OoU1BE6Vry5lxtcqdC8qV60n4jg7EyAVkpyNdyqJ_KcMuWoBXBLfHZE69oHMl7DpBV15Jw0N7Ds2DogpGvm7RH5cZ_Bu09QqJ_P-AYoRMN5k0DcFcdTdmVQhBKHH0jDuByob9cMqpf!-1529417619!293868313",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "numRuc",
+							"value": "20251011461",
+							"type": "text"
+						},
+						{
+							"key": "codComp",
+							"value": "03",
+							"type": "text"
+						},
+						{
+							"key": "numeroSerie",
+							"value": "B004",
+							"type": "text"
+						},
+						{
+							"key": "numero",
+							"value": "159585",
+							"type": "text"
+						},
+						{
+							"key": "fechaEmision",
+							"value": "21/11/2019",
+							"type": "text"
+						},
+						{
+							"key": "monto",
+							"value": "50.00",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://ww1.sunat.gob.pe/ol-ti-itconsultaunificada/consultaUnificada/consultaIndividual",
+					"protocol": "https",
+					"host": [
+						"ww1",
+						"sunat",
+						"gob",
+						"pe"
+					],
+					"path": [
+						"ol-ti-itconsultaunificada",
+						"consultaUnificada",
+						"consultaIndividual"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
