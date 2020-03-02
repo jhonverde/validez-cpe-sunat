@@ -14,8 +14,4 @@ public class ValidezCpeSunatApplication {
         SpringApplication.run(ValidezCpeSunatApplication.class, args);
     }
 
-    @Bean
-    public RestTemplate obtenerRestTemplate(){
-        return new RestTemplate();
-    }
 }

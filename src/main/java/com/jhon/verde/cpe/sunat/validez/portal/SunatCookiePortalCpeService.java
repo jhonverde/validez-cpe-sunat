@@ -1,10 +1,13 @@
-package com.jhon.verde.cpe.sunat.validez;
+package com.jhon.verde.cpe.sunat.validez.portal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jhon.verde.cpe.sunat.validez.dto.CpeRequest;
+import com.jhon.verde.cpe.sunat.validez.exception.NegocioException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
@@ -28,9 +31,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
-public class SunatCpeService {
+public class SunatCookiePortalCpeService {
 
     @Autowired
+    @Qualifier("restTemplateSimple")
     private RestTemplate restTemplate;
 
     @Value("${sunat.consulta.individual.url}")
@@ -40,11 +44,12 @@ public class SunatCpeService {
     private String SUNAT_COOKIE;
 
     @Async
-    public void procesarCpesEnLoteSecuencial(SunatCpeRequest[] sunatCpeRequests) throws IOException, ExecutionException, InterruptedException {
-        List<SunatCpeRequest> listaRequestFuture1 = new ArrayList<>();
-        List<SunatCpeRequest> listaRequestFuture2 = new ArrayList<>();
-        List<SunatCpeRequest> listaRequestFuture3 = new ArrayList<>();
-        List<SunatCpeRequest> listaRequestProcesados = new ArrayList<>();
+    public void procesarCpesEnLoteSecuencial(CpeRequest[] sunatCpeRequests) throws IOException, ExecutionException, InterruptedException {
+        log.info("Inicia procesar CPEs en lote secuencial.");
+        List<CpeRequest> listaRequestFuture1 = new ArrayList<>();
+        List<CpeRequest> listaRequestFuture2 = new ArrayList<>();
+        List<CpeRequest> listaRequestFuture3 = new ArrayList<>();
+        List<CpeRequest> listaRequestProcesados = new ArrayList<>();
 
         listaRequestFuture1 = obtenerListaRequest(sunatCpeRequests[0]);
         listaRequestFuture2 = obtenerListaRequest(sunatCpeRequests[1]);
@@ -53,7 +58,7 @@ public class SunatCpeService {
         Long inicio = System.currentTimeMillis();
 
         for (int i = 0; i < 3; i++) {
-            List<SunatCpeRequest> listaFuture = procesarCpesEnLote(listaRequestFuture1).get();
+            List<CpeRequest> listaFuture = procesarCpesEnLote(listaRequestFuture1).get();
             listaRequestProcesados.addAll(listaFuture);
         }
 
@@ -66,7 +71,7 @@ public class SunatCpeService {
 
         listaRequestProcesados.stream().forEach(cpe -> {
             try {
-                bufferedWriter.write(String.join("|", String.valueOf(contadorCpes.get()), cpe.getNombreCpe(), cpe.getSunatCpeResponseExternal().getRpta().toString(), cpe.getSunatCpeResponseExternal().getMsjError()));
+                bufferedWriter.write(String.join("|", String.valueOf(contadorCpes.get()), cpe.getNombreCpe(), cpe.getSunatCookiePortalCpeResponse().getRpta().toString(), cpe.getSunatCookiePortalCpeResponse().getMsjError()));
                 bufferedWriter.newLine();
                 contadorCpes.incrementAndGet();
             } catch (IOException e) {
@@ -80,18 +85,18 @@ public class SunatCpeService {
     }
 
     @Async
-    public void procesarCpesEnLoteParalelo(SunatCpeRequest[] sunatCpeRequests) throws IOException {
-        List<SunatCpeRequest> listaRequestFuture1 = new ArrayList<>();
-        List<SunatCpeRequest> listaRequestFuture2 = new ArrayList<>();
-        List<SunatCpeRequest> listaRequestFuture3 = new ArrayList<>();
+    public void procesarCpesEnLoteParalelo(CpeRequest[] sunatCpeRequests) throws IOException {
+        List<CpeRequest> listaRequestFuture1 = new ArrayList<>();
+        List<CpeRequest> listaRequestFuture2 = new ArrayList<>();
+        List<CpeRequest> listaRequestFuture3 = new ArrayList<>();
 
         listaRequestFuture1 = obtenerListaRequest(sunatCpeRequests[0]);
         listaRequestFuture2 = obtenerListaRequest(sunatCpeRequests[1]);
         listaRequestFuture3 = obtenerListaRequest(sunatCpeRequests[2]);
 
-        CompletableFuture<List<SunatCpeRequest>> future1 = procesarCpesEnLote(listaRequestFuture1);
-        CompletableFuture<List<SunatCpeRequest>> future2 = procesarCpesEnLote(listaRequestFuture2);
-        CompletableFuture<List<SunatCpeRequest>> future3 = procesarCpesEnLote(listaRequestFuture3);
+        CompletableFuture<List<CpeRequest>> future1 = procesarCpesEnLote(listaRequestFuture1);
+        CompletableFuture<List<CpeRequest>> future2 = procesarCpesEnLote(listaRequestFuture2);
+        CompletableFuture<List<CpeRequest>> future3 = procesarCpesEnLote(listaRequestFuture3);
 
         Long inicio = System.currentTimeMillis();
         CompletableFuture.allOf(future1, future2, future3).join();
@@ -104,11 +109,11 @@ public class SunatCpeService {
         listaFutures.add(future2);
         listaFutures.add(future3);
 
-        List<SunatCpeRequest> listaRequestProcesados = new ArrayList<>();
+        List<CpeRequest> listaRequestProcesados = new ArrayList<>();
 
         listaFutures.stream().forEach(future -> {
             try {
-                listaRequestProcesados.addAll((Collection<? extends SunatCpeRequest>) future.get());
+                listaRequestProcesados.addAll((Collection<? extends CpeRequest>) future.get());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -123,7 +128,7 @@ public class SunatCpeService {
 
         listaRequestProcesados.stream().forEach(cpe -> {
             try {
-                bufferedWriter.write(String.join("|", String.valueOf(contadorCpes.get()), cpe.getNombreCpe(), cpe.getSunatCpeResponseExternal().getRpta().toString(), cpe.getSunatCpeResponseExternal().getMsjError()));
+                bufferedWriter.write(String.join("|", String.valueOf(contadorCpes.get()), cpe.getNombreCpe(), cpe.getSunatCookiePortalCpeResponse().getRpta().toString(), cpe.getSunatCookiePortalCpeResponse().getMsjError()));
                 bufferedWriter.newLine();
                 contadorCpes.incrementAndGet();
             } catch (IOException e) {
@@ -136,32 +141,32 @@ public class SunatCpeService {
         log.info("Termino de crear archivo txt");
     }
 
-    private List<SunatCpeRequest> obtenerListaRequest(SunatCpeRequest sunatCpeRequest){
-        List<SunatCpeRequest> listaRequest = new ArrayList<>();
+    private List<CpeRequest> obtenerListaRequest(CpeRequest sunatCpeRequest){
+        List<CpeRequest> listaRequest = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             listaRequest.add(sunatCpeRequest);
         }
         return listaRequest;
     }
 
-    private CompletableFuture<List<SunatCpeRequest>> procesarCpesEnLote(List<SunatCpeRequest> listaCpes) {
+    private CompletableFuture<List<CpeRequest>> procesarCpesEnLote(List<CpeRequest> listaCpes) {
         return CompletableFuture.supplyAsync(() -> {
             listaCpes.parallelStream().forEach(cpe -> {
-                cpe.setSunatCpeResponseExternal(procesarCpe(cpe));
+                cpe.setSunatCookiePortalCpeResponse(procesarCpe(cpe));
             });
             return listaCpes;
         });
     }
 
-    public SunatCpeResponseExternal procesarCpe(SunatCpeRequest request) {
-        return consultaCpeEnPaginaSunat(request);
+    public SunatCookiePortalCpeResponse procesarCpe(CpeRequest request) {
+        return consultarCpeEnPaginaSunat(request);
     }
 
-    private SunatCpeResponseExternal consultaCpeEnPaginaSunat(SunatCpeRequest request) {
+    private SunatCookiePortalCpeResponse consultarCpeEnPaginaSunat(CpeRequest request) {
         URI uri = null;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add(HttpHeaders.COOKIE, obtenerCookieValido());
+        headers.add(HttpHeaders.COOKIE, SUNAT_COOKIE);
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("numRuc", request.getComprobante().getRuc());
@@ -179,7 +184,7 @@ public class SunatCpeService {
 
         RequestEntity requestEntity = new RequestEntity(formData, headers, HttpMethod.POST, uri);
         ResponseEntity<String> response = null;
-        SunatCpeResponseExternal sunatCpeResponseExternal = null;
+        SunatCookiePortalCpeResponse sunatCpeResponseExternal = null;
         try {
             Long inicioConsultaCpe = System.currentTimeMillis();
             response = restTemplate.postForEntity(uri, requestEntity, String.class);
@@ -194,17 +199,13 @@ public class SunatCpeService {
         String jsonUnEscapeJson = StringEscapeUtils.unescapeJson(jsonFormateado);
 
         try {
-            sunatCpeResponseExternal = new ObjectMapper().readValue(jsonUnEscapeJson, SunatCpeResponseExternal.class);
+            sunatCpeResponseExternal = new ObjectMapper().readValue(jsonUnEscapeJson, SunatCookiePortalCpeResponse.class);
         } catch (Exception e) {
             log.error("Error parsear JSON SUNAT Cpe response: {}", e);
             return null;
         }
 
         return sunatCpeResponseExternal;
-    }
-
-    private String obtenerCookieValido() {
-        return SUNAT_COOKIE;
     }
 
 }

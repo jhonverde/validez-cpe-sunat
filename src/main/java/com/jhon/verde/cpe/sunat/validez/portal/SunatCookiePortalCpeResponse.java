@@ -1,4 +1,4 @@
-package com.jhon.verde.cpe.sunat.validez;
+package com.jhon.verde.cpe.sunat.validez.portal;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SunatCpeResponseExternal {
+public class SunatCookiePortalCpeResponse {
 
     @JsonProperty("data")
     private Comprobante comprobante;

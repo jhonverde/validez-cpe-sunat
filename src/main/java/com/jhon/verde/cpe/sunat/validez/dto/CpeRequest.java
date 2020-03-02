@@ -1,19 +1,22 @@
-package com.jhon.verde.cpe.sunat.validez;
+package com.jhon.verde.cpe.sunat.validez.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.jhon.verde.cpe.sunat.validez.rest.SunatApiRestCpeResponse;
+import com.jhon.verde.cpe.sunat.validez.portal.SunatCookiePortalCpeResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SunatCpeRequest {
+public class CpeRequest {
 
     private Comprobante comprobante;
     private String fechaEmision;
     private String importe;
 
-    private SunatCpeResponseExternal sunatCpeResponseExternal;
+    private SunatCookiePortalCpeResponse sunatCookiePortalCpeResponse;
+    private SunatApiRestCpeResponse sunatApiRestCpeResponse;
 
     @Data
     @NoArgsConstructor

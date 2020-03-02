@@ -1,4 +1,4 @@
-package com.jhon.verde.cpe.sunat.validez;
+package com.jhon.verde.cpe.sunat.validez.exception;
 
 public class NegocioException extends RuntimeException{
 

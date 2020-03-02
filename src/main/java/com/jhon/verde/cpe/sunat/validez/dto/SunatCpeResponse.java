@@ -1,4 +1,4 @@
-package com.jhon.verde.cpe.sunat.validez;
+package com.jhon.verde.cpe.sunat.validez.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
