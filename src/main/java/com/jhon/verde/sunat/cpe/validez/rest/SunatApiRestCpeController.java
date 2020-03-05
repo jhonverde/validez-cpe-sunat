@@ -1,6 +1,6 @@
-package com.jhon.verde.cpe.sunat.validez.rest;
+package com.jhon.verde.sunat.cpe.validez.rest;
 
-import com.jhon.verde.cpe.sunat.validez.dto.CpeRequest;
+import com.jhon.verde.sunat.cpe.validez.dto.CpeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,25 +13,25 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/sunat/rest")
-public class SunatCpeApiRestController {
+public class SunatApiRestCpeController {
 
     @Autowired
-    private SunatCpeService sunatCpeService;
+    private SunatApiRestCpeService sunatApiRestCpeService;
 
     @PostMapping(value = "/cpe/validez", produces = MediaType.APPLICATION_JSON_VALUE)
     public SunatApiRestCpeResponse procesarCpe(@Valid @RequestBody CpeRequest request) {
-        return sunatCpeService.procesarCpe(request);
+        return sunatApiRestCpeService.validarCpe(request);
     }
 
     @PostMapping(value = "/cpe/validez/lote", produces = MediaType.APPLICATION_JSON_VALUE)
     public String procesarCpeLoteParalelo(@Valid @RequestBody CpeRequest[] requests) throws IOException {
-        sunatCpeService.procesarCpesEnLoteParalelo(requests);
+        sunatApiRestCpeService.procesarCpesEnLoteParalelo(requests);
         return "Se esta procesando su solicitud. En unos minutos le llegara un correo informandole de lo sucedido.";
     }
 
     @PostMapping(value = "/cpe/validez/lote-secuencial", produces = MediaType.APPLICATION_JSON_VALUE)
     public String procesarCpeLoteSecuencial(@Valid @RequestBody CpeRequest[] requests) throws Exception {
-        sunatCpeService.procesarCpesEnLoteSecuencial(requests);
+        sunatApiRestCpeService.procesarCpesEnLoteSecuencial(requests);
         return "Se esta procesando su solicitud. En unos minutos le llegara un correo informandole de lo sucedido.";
     }
 

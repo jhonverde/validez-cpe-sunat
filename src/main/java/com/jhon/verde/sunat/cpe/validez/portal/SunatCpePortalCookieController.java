@@ -1,6 +1,6 @@
-package com.jhon.verde.cpe.sunat.validez.portal;
+package com.jhon.verde.sunat.cpe.validez.portal;
 
-import com.jhon.verde.cpe.sunat.validez.dto.CpeRequest;
+import com.jhon.verde.sunat.cpe.validez.dto.CpeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;

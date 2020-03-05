@@ -1,4 +1,4 @@
-package com.jhon.verde.cpe.sunat.validez.portal;
+package com.jhon.verde.sunat.cpe.validez.portal;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

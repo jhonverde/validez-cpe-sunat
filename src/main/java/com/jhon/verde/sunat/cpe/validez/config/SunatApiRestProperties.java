@@ -1,4 +1,4 @@
-package com.jhon.verde.cpe.sunat.validez.config;
+package com.jhon.verde.sunat.cpe.validez.config;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "sunat.oauth2")
 @Data
 @NoArgsConstructor
-public class SunatOAuth2Properties {
+public class SunatApiRestProperties {
 
     private String clientId;
     private String clientSecret;

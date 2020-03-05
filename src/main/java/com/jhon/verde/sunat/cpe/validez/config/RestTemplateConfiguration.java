@@ -1,7 +1,7 @@
-package com.jhon.verde.cpe.sunat.validez.config;
+package com.jhon.verde.sunat.cpe.validez.config;
 
-import com.jhon.verde.cpe.sunat.validez.rest.SunatApiRestCpeService;
-import com.jhon.verde.cpe.sunat.validez.rest.SunatApiRestTokenResponse;
+import com.jhon.verde.sunat.cpe.validez.rest.SunatApiRestCpeService;
+import com.jhon.verde.sunat.cpe.validez.rest.SunatApiRestTokenResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.Collections;
 
 @Configuration
 @Slf4j
@@ -27,9 +26,7 @@ public class RestTemplateConfiguration {
 
     @PostConstruct
     public void inicializarToken(){
-        sunatApiRestTokenResponse = new SunatApiRestTokenResponse();
-        sunatApiRestTokenResponse.setAccessToken("MAL");
-        //sunatApiRestTokenResponse = sunatApiRestCpeService.obtenerToken();
+        sunatApiRestTokenResponse = sunatApiRestCpeService.obtenerToken();
     }
 
     @Bean("restTemplateSimple")
@@ -40,8 +37,6 @@ public class RestTemplateConfiguration {
     @Bean("restTemplateApiRestSunat")
     public RestTemplate RestTemplate(){
         RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
-        //RestTemplate restTemplate = new RestTemplate();
-        //restTemplate.setInterceptors(Collections.singletonList(new HttpStatusUnauthorizedInterceptor()));
         restTemplate.getInterceptors().add(new HttpStatusUnauthorizedInterceptor());
         return restTemplate;
     }
@@ -57,7 +52,7 @@ public class RestTemplateConfiguration {
                 log.info("Token no autorizado: {}", sunatApiRestTokenResponse.getAccessToken());
                 log.info("Obteniendo token.");
                 sunatApiRestTokenResponse = sunatApiRestCpeService.obtenerToken();
-                log.info("Token: {}", sunatApiRestTokenResponse.getAccessToken().hashCode());
+                log.info("Nuevo token: {}", sunatApiRestTokenResponse.getAccessToken().hashCode());
                 request.getHeaders().set(HttpHeaders.AUTHORIZATION, "Bearer " + sunatApiRestTokenResponse.getAccessToken());
                 return execution.execute(request, body);
             }

@@ -1,4 +1,4 @@
-package com.jhon.verde.cpe.sunat.validez.rest;
+package com.jhon.verde.sunat.cpe.validez.rest;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

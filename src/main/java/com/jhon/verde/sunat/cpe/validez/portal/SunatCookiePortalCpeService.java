@@ -1,8 +1,8 @@
-package com.jhon.verde.cpe.sunat.validez.portal;
+package com.jhon.verde.sunat.cpe.validez.portal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jhon.verde.cpe.sunat.validez.dto.CpeRequest;
-import com.jhon.verde.cpe.sunat.validez.exception.NegocioException;
+import com.jhon.verde.sunat.cpe.validez.dto.CpeRequest;
+import com.jhon.verde.sunat.cpe.validez.exception.NegocioException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -37,7 +37,7 @@ public class SunatCookiePortalCpeService {
     @Qualifier("restTemplateSimple")
     private RestTemplate restTemplate;
 
-    @Value("${sunat.consulta.individual.url}")
+    @Value("${sunat.consulta.individual.validar-cpe-url}")
     private String SUNAT_CONSULTA_INDIVIDUAL_URL;
 
     @Value("${sunat.consulta.individual.cookie}")

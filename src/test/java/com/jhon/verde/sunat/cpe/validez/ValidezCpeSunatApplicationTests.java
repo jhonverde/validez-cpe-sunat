@@ -1,4 +1,4 @@
-package com.jhon.verde.cpe.sunat.validez;
+package com.jhon.verde.sunat.cpe.validez;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

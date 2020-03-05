@@ -1,8 +1,9 @@
-package com.jhon.verde.cpe.sunat.validez.dto;
+package com.jhon.verde.sunat.cpe.validez.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.jhon.verde.cpe.sunat.validez.rest.SunatApiRestCpeResponse;
-import com.jhon.verde.cpe.sunat.validez.portal.SunatCookiePortalCpeResponse;
+import com.jhon.verde.sunat.cpe.validez.rest.SunatApiRestCpeResponse;
+import com.jhon.verde.sunat.cpe.validez.portal.SunatCookiePortalCpeResponse;
+import com.jhon.verde.sunat.cpe.validez.tesseract.SunatTesseractCpeResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,11 +18,12 @@ public class CpeRequest {
 
     private SunatCookiePortalCpeResponse sunatCookiePortalCpeResponse;
     private SunatApiRestCpeResponse sunatApiRestCpeResponse;
+    private SunatTesseractCpeResponse sunatTesseractCpeResponse;
 
     @Data
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class Comprobante {
+    public static class Comprobante {
         private String ruc;
         private String tipoCpe;
         private String serie;
