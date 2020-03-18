@@ -1,7 +1,7 @@
 package com.jhon.verde.sunat.cpe.validez.config;
 
-import com.jhon.verde.sunat.cpe.validez.rest.SunatApiRestCpeService;
-import com.jhon.verde.sunat.cpe.validez.rest.SunatApiRestTokenResponse;
+import com.jhon.verde.sunat.cpe.validez.facade.SunatApiRestCpeFacade;
+import com.jhon.verde.sunat.cpe.validez.dto.SunatApiRestTokenResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,13 +20,15 @@ import java.io.IOException;
 public class RestTemplateConfiguration {
 
     @Autowired
-    private SunatApiRestCpeService sunatApiRestCpeService;
+    private SunatApiRestCpeFacade sunatApiRestCpeService;
 
     private SunatApiRestTokenResponse sunatApiRestTokenResponse;
 
     @PostConstruct
     public void inicializarToken(){
         sunatApiRestTokenResponse = sunatApiRestCpeService.obtenerToken();
+        //sunatApiRestTokenResponse = new SunatApiRestTokenResponse();
+        //sunatApiRestTokenResponse.setAccessToken("MAL");
     }
 
     @Bean("restTemplateSimple")

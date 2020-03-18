@@ -1,4 +1,4 @@
-package com.jhon.verde.sunat.cpe.validez.tesseract;
+package com.jhon.verde.sunat.cpe.validez.dto;
 
 import com.jhon.verde.sunat.cpe.validez.util.Constantes;
 import lombok.AllArgsConstructor;

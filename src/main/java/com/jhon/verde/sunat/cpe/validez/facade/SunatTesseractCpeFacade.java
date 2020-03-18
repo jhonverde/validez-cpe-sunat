@@ -1,12 +1,12 @@
-package com.jhon.verde.sunat.cpe.validez.tesseract;
+package com.jhon.verde.sunat.cpe.validez.facade;
 
 import com.jhon.verde.sunat.cpe.validez.config.SunatTesseractProperties;
 import com.jhon.verde.sunat.cpe.validez.dto.CpeRequest;
+import com.jhon.verde.sunat.cpe.validez.dto.SunatTesseractCpeResponse;
 import com.jhon.verde.sunat.cpe.validez.exception.NegocioException;
 import com.jhon.verde.sunat.cpe.validez.util.Constantes;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.Tesseract1;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -25,21 +24,14 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
-public class SunatTesseractCpeService {
+public class SunatTesseractCpeFacade {
 
     @Autowired
     private SunatTesseractProperties sunatTesseractProperties;
@@ -51,71 +43,7 @@ public class SunatTesseractCpeService {
     @Qualifier("restTemplateSimple")
     private RestTemplate restTemplate;
 
-    @Async
-    public void procesarCpesEnLoteSecuencial(CpeRequest[] sunatCpeRequests) throws IOException {
-        log.info("Inicia procesar CPEs en lote secuencial.");
-        List<CpeRequest> listaRequestFuture1 = new ArrayList<>();
-        List<CpeRequest> listaRequestProcesados = new ArrayList<>();
-
-        listaRequestFuture1 = obtenerListaRequest(sunatCpeRequests[0]);
-
-        Long inicio = System.currentTimeMillis();
-
-        for(int i=0 ; i<3 ; i++){
-            listaRequestProcesados.addAll(procesarCpesEnLote(listaRequestFuture1));
-        }
-
-        Long fin = System.currentTimeMillis();
-        log.info("Tiempo de procesar todos los comprobantes: {}", fin - inicio);
-
-        FileWriter writer = new FileWriter("CpesSunatTesseractProcesadosGet.txt", false);
-        BufferedWriter bufferedWriter = new BufferedWriter(writer);
-        AtomicInteger contadorCpes = new AtomicInteger(1);
-
-        listaRequestProcesados.stream().forEach(cpe -> {
-            try {
-                bufferedWriter.write(String.join("|", String.valueOf(contadorCpes.get()), cpe.getNombreCpe(), cpe.getSunatApiRestCpeResponse().getSuccess(), cpe.getSunatApiRestCpeResponse().getMessage()));
-                bufferedWriter.newLine();
-                contadorCpes.incrementAndGet();
-            } catch (IOException e) {
-                log.error("IOException. ", e);
-            }
-        });
-
-        bufferedWriter.close();
-        writer.close();
-
-        log.info("Termino de crear archivo TXT");
-    }
-
-    private List<CpeRequest> obtenerListaRequest(CpeRequest sunatCpeRequest){
-        List<CpeRequest> listaRequest = new ArrayList<>();
-        for (int i = 0; i < 300; i++) {
-            listaRequest.add(sunatCpeRequest);
-        }
-        return listaRequest;
-    }
-
-    private List<CpeRequest> procesarCpesEnLote(List<CpeRequest> listaCpes) {
-        ForkJoinPool forkJoinPool = new ForkJoinPool(5);
-        AtomicInteger contador = new AtomicInteger(0);
-        try {
-            return  forkJoinPool.submit(() -> {
-                listaCpes.parallelStream().forEach(cpe -> {
-                    cpe.setSunatTesseractCpeResponse(validarCpe(cpe));
-                });
-                return listaCpes;
-            }).get();
-        } catch (InterruptedException e) {
-            log.error("Hubo un error de Interrupted Exception.", e);
-        } catch (ExecutionException e) {
-            log.error("Hubo un error de ExecutionException.", e);
-        }
-
-        return listaCpes;
-    }
-
-    public SunatTesseractCpeResponse validarCpe(CpeRequest request){
+    public SunatTesseractCpeResponse validarCpe(CpeRequest request) {
         ResponseEntity<byte[]> responseSunatCaptcha = null;
         String bodyHtmlResponseValidezCpe = null, textoCaptcha = null;
         SunatTesseractCpeResponse response = SunatTesseractCpeResponse.responseError(Constantes.NO_SE_PUDO_VALIDAR_CPE);
@@ -146,10 +74,10 @@ public class SunatTesseractCpeService {
 
             log.info("Tiempo de obtencion texto tesseract: {} ms", finObtenerTextoTesseract - inicioObtenerTextoTesseract);
 
-            if(!textoCaptcha.matches("[A-Z]{4}")){
-               log.error("Texto captcha no es uno valido. Captcha: {}", textoCaptcha);
-               contadorReintento++;
-               continue;
+            if (!textoCaptcha.matches("[A-Z]{4}")) {
+                log.error("Texto captcha no es uno valido. Captcha: {}", textoCaptcha);
+                contadorReintento++;
+                continue;
             }
 
             bodyHtmlResponseValidezCpe = validarCpe(responseSunatCaptcha.getHeaders(), request, textoCaptcha);
@@ -197,8 +125,8 @@ public class SunatTesseractCpeService {
         formData.add("tipocomprobante", obtenerTipoComprobante(request.getComprobante().getTipoCpe(), request.getComprobante().getSerie()));
         formData.add("num_serie", request.getComprobante().getSerie());
         formData.add("num_comprob", request.getComprobante().getCorrelativo());
-        formData.add("fec_emision", request.getFechaEmision() != null ? request.getFechaEmision() : null);
-        formData.add("cantidad", request.getImporte() != null ? request.getImporte() : null);
+        formData.add("fec_emision", request.getFechaEmision());
+        formData.add("cantidad", request.getImporte());
         formData.add("codigo", textoCaptcha);
 
         try {
@@ -210,9 +138,9 @@ public class SunatTesseractCpeService {
 
         RequestEntity requestEntity = new RequestEntity(formData, headers, HttpMethod.POST, uri);
         ResponseEntity<String> response = null;
-        try{
+        try {
             response = restTemplate.postForEntity(uri, requestEntity, String.class);
-        }catch(RestClientException re){
+        } catch (RestClientException re) {
             log.error("No se pudo validar CPE. RestClientException. ", re);
             return Constantes.NO_SE_PUDO_VALIDAR_CPE;
         }
@@ -233,7 +161,7 @@ public class SunatTesseractCpeService {
     }
 
     private SunatTesseractCpeResponse obtenerResponseRespuestaSunat(String html) {
-        if(Constantes.NO_SE_PUDO_VALIDAR_CPE.equals(html)){
+        if (Constantes.NO_SE_PUDO_VALIDAR_CPE.equals(html)) {
             return SunatTesseractCpeResponse.responseError(Constantes.NO_SE_PUDO_VALIDAR_CPE);
         }
 
@@ -260,8 +188,6 @@ public class SunatTesseractCpeService {
 
         Elements elementsClassBgn = doc.getElementsByClass("bgn");
         String mensajeOk = elementsClassBgn.get(0).text();
-
-        System.out.println(html);
 
         if (!StringUtils.isEmpty(mensajeOk)) {
             if (estaMensajeSunatEnListaDeTags(Constantes.TAGS_NO_ACEPTADO, mensajeOk)) {

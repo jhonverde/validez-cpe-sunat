@@ -1,4 +1,4 @@
-package com.jhon.verde.sunat.cpe.validez.rest;
+package com.jhon.verde.sunat.cpe.validez.dto;
 
 import com.jhon.verde.sunat.cpe.validez.dto.CpeRequest;
 import lombok.Data;
