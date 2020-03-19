@@ -69,10 +69,11 @@ public class SunatApiRestCpeFacade {
         SunatApiRestCpeRequest request = new SunatApiRestCpeRequest(cpeRequest);
 
         try {
+            log.info("Validando CPE en API REST. Request: {}", request);
             return restTemplateValidarCpe.postForEntity(sunatOAuth2Properties.getValidarCpeUrl(), request, SunatApiRestCpeResponse.class).getBody();
         } catch (RestClientException re) {
-            log.error("RestClientException. Error al validar cpe en SUNAT. Request: {}. Excepcion: {}", request, re);
-            return null;
+            log.error("RestClientException. Error al validar cpe en SUNAT. Request: {}. Excepcion: {}", request, re.getMessage(), re);
+            return new SunatApiRestCpeResponse("false", re.getMessage());
         }
 
     }

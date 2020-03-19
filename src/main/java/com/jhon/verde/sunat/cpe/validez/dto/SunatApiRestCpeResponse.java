@@ -14,6 +14,11 @@ public class SunatApiRestCpeResponse {
     private String errorCode;
     private DataCpe data;
 
+    public SunatApiRestCpeResponse(String success, String message){
+        this.success = success;
+        this.message = message;
+    }
+
     @Data
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
